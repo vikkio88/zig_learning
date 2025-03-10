@@ -6,6 +6,14 @@ pub const Currency = enum {
     GBP,
     USD,
 
+    pub fn format(self: Currency) []const u8 {
+        return switch (self) {
+            Currency.EUR => "{}€",
+            Currency.GBP => "£{}",
+            Currency.USD => "{}$",
+        };
+    }
+
     pub fn toSymbol(self: Currency) []const u8 {
         return switch (self) {
             Currency.EUR => "€",
