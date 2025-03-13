@@ -3,11 +3,11 @@ const gpa = std.heap.GeneralPurposeAllocator;
 const eq = std.testing.expectEqual;
 
 const User = struct {
-    id: []u8,
-    name: []u8,
-    surname: []u8,
+    id: []const u8,
+    name: []const u8,
+    surname: []const u8,
     pub fn init(id: []const u8, name: []const u8, surname: []const u8) User {
-        return .{ id, name, surname };
+        return .{ .id = id, .name = name, .surname = surname };
     }
 };
 
