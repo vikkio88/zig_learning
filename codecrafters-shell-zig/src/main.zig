@@ -46,11 +46,8 @@ pub fn main() !void {
             }
 
             const match = fs.getFolderForFile(allocator, command_arg, path_commands.items);
-            defer {
-                if (match != null) {
-                    allocator.free(match.?);
-                }
-            }
+            defer if (match) |res| allocator.free(res);
+
             if (match == null) {
                 try stdout.print("{s}: not found\n", .{command_arg});
                 continue;
@@ -64,10 +61,7 @@ pub fn main() !void {
         // pwd
         if (str.eql(command, "pwd")) {
             const res = fs.pwd(allocator);
-            defer {
-                if (res != null)
-                    allocator.free(res.?);
-            }
+            defer if (res) |ptr| allocator.free(ptr);
 
             if (res) |d| {
                 try stdout.print("{s}\n", .{d});
@@ -79,11 +73,7 @@ pub fn main() !void {
         // exec external script if not matching internal command
         // get the command
         const match = fs.getFolderForFile(allocator, command, path_commands.items);
-        defer {
-            if (match != null) {
-                allocator.free(match.?);
-            }
-        }
+        defer if (match) |res| allocator.free(res);
 
         if (match != null) {
             const proc_result = try std.process.Child.run(.{ .allocator = allocator, .argv = args.items });
